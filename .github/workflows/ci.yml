@@ -1,7 +1,6 @@
-# CI: run tests on pushes and PRs to keep the package healthy.
-# Uses GitHub Actions with Python 3.8, 3.9, 3.10, 3.11, and 3.12 on Ubuntu latest.
-name: ci 
-on: 
+name: ci
+
+on:
   push:
     branches: [ main ]
   pull_request:
@@ -9,15 +8,25 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - name: Install dependencies
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"                  
+
+      - name: Install project and test deps
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e .
-          python -m pip install pytest pytest-asyncio anyio
+          python -m pip install -e .    
+          python -m pip install -U pytest anyio pytest-asyncio pytest-cov
+
       - name: Run tests
-        run: pytest
+        run: |
+          python -m pytest -q --cov=functools2 --cov-report=term-missing
