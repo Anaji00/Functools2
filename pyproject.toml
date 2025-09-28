@@ -1,0 +1,49 @@
+# ------------------------------------------------------------
+# PEP 517/518 build configuration. We use Hatchling for wheels.
+# ------------------------------------------------------------
+[build-system]
+requires = ["hatchling>=1.21.0"]
+build-backend = "hatchling.build"
+
+# ------------------------------------------------------------
+# Project metadata for PyPI (name, version, classifiers, URLs)
+# ------------------------------------------------------------
+[project]
+name = "functools2"
+version = "0.1.1"
+description = "Async LRU cache with TTL, singleflight, and stale-while-revalidate (SWR)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Alessio Naji-Sepasgozar", email = "alessionaji1@gmail.com" }]
+keywords = ["asyncio", "cache", "lru", "ttl", "swr", "singleflight", "fastapi"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Software Development :: Libraries",
+  "Typing :: Typed"
+]
+
+[project.urls]
+Homepage = "https://github.com/Anaji00/functools2"
+Repository = "https://github.com/Anaji00/functools2.git"
+Issues = "https://github.com/Anaji00/functools2/issues"
+
+# ------------------------------------------------------------
+# Hatchling build config (src/ layout)
+# ------------------------------------------------------------
+[tool.hatch.build]
+# keep distributions lean
+exclude = ["tests", "docs", ".github", "examples"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/functools2"]
+
+# ------------------------------------------------------------
+# Pytest defaults (quiet mode + asyncio auto detection)
+# ------------------------------------------------------------
+[tool.pytest.ini_options]
+addopts = "-q"
+asyncio_mode = "auto"
